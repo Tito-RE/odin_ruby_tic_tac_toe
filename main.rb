@@ -36,8 +36,19 @@ class Board
     private
   
     attr_accessor :canvas
+end
 
-  
+class Piece
+
+    def initialize(player, name, alias_to_display)
+        @player = player
+        @name = name
+        @alias_to_display = alias_to_display
+    end
+
+    private
+
+    attr_accessor :player, :name, :alias_to_display
 end 
 
 board = Board.new(3,3)
