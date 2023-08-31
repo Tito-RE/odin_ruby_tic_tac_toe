@@ -55,19 +55,110 @@ class Piece
     attr_accessor :player, :name
 end 
 
-class TicTaeToe
+class TicTaeToeBoard < Board
+    def initialize(rows,columns)
+        super
+        @name = "TicTaeToe"
+    end
+
+    def empty_cells?
+        !@canvas.flatten.all?
+    end
+
+    def checkBoardGame(symbol)
+        return true if checkRows(symbol)
+        return true if checkColumns(symbol)
+        return true if checkDiagonals(symbol)
+        return false
+    end
+
+    # Check for a pieces of the same symbol by rows
+    def checkRows(symbol)
+        counter = 0
+        @canvas.each do |row|
+            row.each do |p| 
+                if p 
+                    if p.alias_to_display == symbol
+                        counter += 1     
+                    end
+                end
+            end
+            return true if counter == 3
+            counter = 0 
+        end
+        return false
+    end
+
+    # Check for a pieces of the same symbol by columns
+    def checkColumns(symbol)
+        counter = 0
+        for i in 0..2 do
+            for j in 0..2 do
+                p =  @canvas[j][i]
+                if p
+                    if p.alias_to_display == symbol
+                        counter += 1
+                    end
+                end
+            end
+            return true if counter == 3
+            counter = 0
+        end
+        return false
+    end
+
+    # Check for a pieces of the same symbol by diagonals
+    def checkDiagonals(symbol)
+        if @canvas[0][0] and @canvas[1][1] and @canvas[2][2]
+            if @canvas[0][0].alias_to_display and @canvas[1][1].alias_to_display and @canvas[2][2].alias_to_display
+                return true
+            end
+        end 
+        if @canvas[2][0] and @canvas[1][1] and @canvas[0][2]
+            if @canvas[2][0].alias_to_display and @canvas[1][1].alias_to_display and @canvas[0][2].alias_to_display
+                puts "TRU"
+                return true
+            end
+        end
+        return false
+    end
+end
+
+class TicTaeToeGame
     def initialize()
-        @board = Board.new(3,3)
+        @board = TicTaeToeBoard.new(3,3)
         @name = "TicTaeToe"
     end
     
     def game()
-        piece = Piece.new("Player1", "X", "X")
-        @board.add(piece,0,0)
-        @board.display()
+        while @board.empty_cells? do
+            puts "Insert the row: "
+            x = gets.chomp.to_i
+            puts "Insert the column: "
+            y = gets.chomp.to_i
+            piece = Piece.new("Player1", "X", "X")
+            @board.add(piece,x,y)
+            @board.display()
+
+            # WIP 
+            if @board.checkBoardGame("X")
+                puts "Winner X"
+                break
+            end
+        end
     end
-    
+
+    def getGameStatus()
+        # detect when game over or game in proccess
+        @board.flatten.any?
+    end    
+
+    def getWinnerPlayer()
+        # detect if a player win 
+    end
+
 end
 
-game = TicTaeToe.new()
+
+game = TicTaeToeGame.new()
 game.game()
