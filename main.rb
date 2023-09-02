@@ -110,13 +110,12 @@ class TicTaeToeBoard < Board
     # Check for a pieces of the same symbol by diagonals
     def checkDiagonals(symbol)
         if @canvas[0][0] and @canvas[1][1] and @canvas[2][2]
-            if @canvas[0][0].alias_to_display and @canvas[1][1].alias_to_display and @canvas[2][2].alias_to_display
+            if @canvas[0][0].alias_to_display == symbol and @canvas[1][1].alias_to_display == symbol and @canvas[2][2].alias_to_display == symbol
                 return true
             end
         end 
         if @canvas[2][0] and @canvas[1][1] and @canvas[0][2]
-            if @canvas[2][0].alias_to_display and @canvas[1][1].alias_to_display and @canvas[0][2].alias_to_display
-                puts "TRU"
+            if @canvas[2][0].alias_to_display == symbol and @canvas[1][1].alias_to_display == symbol and @canvas[0][2].alias_to_display == symbol
                 return true
             end
         end
@@ -131,30 +130,34 @@ class TicTaeToeGame
     end
     
     def game()
+        turn = true
         while @board.empty_cells? do
             puts "Insert the row: "
             x = gets.chomp.to_i
             puts "Insert the column: "
             y = gets.chomp.to_i
-            piece = Piece.new("Player1", "X", "X")
+
+            if turn
+                piece = Piece.new("Player1", "X", "X")
+                turn = false
+            else
+                piece = Piece.new("Player2", "O", "O")
+                turn = true
+            end
+
             @board.add(piece,x,y)
             @board.display()
 
-            # WIP 
+            
             if @board.checkBoardGame("X")
                 puts "Winner X"
                 break
             end
+            if @board.checkBoardGame("O")
+                puts "Winner O"
+                break
+            end
         end
-    end
-
-    def getGameStatus()
-        # detect when game over or game in proccess
-        @board.flatten.any?
-    end    
-
-    def getWinnerPlayer()
-        # detect if a player win 
     end
 
 end
