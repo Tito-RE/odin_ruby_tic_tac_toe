@@ -29,6 +29,11 @@ class Board
         @canvas[row][col] = object
     end
 
+    def emptyCell?(row,col)
+        return false if @canvas[row][col] != nil
+        true    
+    end
+
     def clean
         @canvas = []
     end
@@ -132,11 +137,19 @@ class TicTaeToeGame
     def game()
         turn = true
         while @board.empty_cells? do
-            puts "Insert the row: "
-            x = gets.chomp.to_i
-            puts "Insert the column: "
-            y = gets.chomp.to_i
+            x,y = nil, nil 
 
+            loop do #WIP search for alternatives to loop do
+                puts "Insert the row: "
+                x = gets.chomp.to_i
+                puts "Insert the column: "
+                y = gets.chomp.to_i
+
+                break if @board.emptyCell?(x,y)
+                
+                puts "There is a piece here!, try another one"
+            end
+            
             if turn
                 piece = Piece.new("Player1", "X", "X")
                 turn = false
