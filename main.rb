@@ -1,5 +1,14 @@
+module Functions
+    # Convert one letter to a number (alphabetically)
+    def letterToNumber(letter)
+        alp = ("a".."z").to_a
+        return alp.index(letter)
+    end  
+end 
+
 class Board
-  
+    include Functions    
+
     def initialize(rows, columns)
         @canvas = Array.new(rows) { Array.new(columns) }
     end
@@ -25,14 +34,14 @@ class Board
         end
     end
 
-    # WIP
     def add(object,row,col)
-        if !emptyCell?(row,col)
-           puts "There is a piece here!, try another one"
-           return false
-        end
+        col = letterToNumber(col)
         if !validCoordinates?(row,col)
            puts "Invalid coordinates!"
+           return false
+        end
+        if !emptyCell?(row,col)
+           puts "There is a piece here!, try another one"
            return false
         end
         @canvas[row][col] = object
@@ -44,9 +53,12 @@ class Board
         true    
     end
 
-    # WIP
+    # Check for a valid coordinates
     def validCoordinates?(row,col)
+        return false if row == nil
+        return false if col == nil
         return false if row >= @canvas.length
+        return false if row <= 0
         return false if col >= @canvas[0].length
         return true
     end
@@ -152,6 +164,7 @@ class TicTaeToeGame
     end
     
     def game()
+        @board.display()
         turn = true
         while @board.empty_cells? do
             x,y = nil, nil 
@@ -164,10 +177,11 @@ class TicTaeToeGame
             end
 
             loop do 
-                puts "Insert the row: "
+                puts "Insert the row (number): "
                 x = gets.chomp.to_i
-                puts "Insert the column: "
-                y = gets.chomp.to_i
+                x -= 1
+                puts "Insert the column (letter): "
+                y = gets.chomp
 
                 break if @board.add(piece,x,y)
                 
