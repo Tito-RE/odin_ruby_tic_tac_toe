@@ -25,13 +25,30 @@ class Board
         end
     end
 
+    # WIP
     def add(object,row,col)
+        if !emptyCell?(row,col)
+           puts "There is a piece here!, try another one"
+           return false
+        end
+        if !validCoordinates?(row,col)
+           puts "Invalid coordinates!"
+           return false
+        end
         @canvas[row][col] = object
+        return true
     end
 
     def emptyCell?(row,col)
         return false if @canvas[row][col] != nil
         true    
+    end
+
+    # WIP
+    def validCoordinates?(row,col)
+        return false if row >= @canvas.length
+        return false if col >= @canvas[0].length
+        return true
     end
 
     def clean
@@ -138,18 +155,6 @@ class TicTaeToeGame
         turn = true
         while @board.empty_cells? do
             x,y = nil, nil 
-
-            loop do #WIP search for alternatives to loop do
-                puts "Insert the row: "
-                x = gets.chomp.to_i
-                puts "Insert the column: "
-                y = gets.chomp.to_i
-
-                break if @board.emptyCell?(x,y)
-                
-                puts "There is a piece here!, try another one"
-            end
-            
             if turn
                 piece = Piece.new("Player1", "X", "X")
                 turn = false
@@ -158,7 +163,16 @@ class TicTaeToeGame
                 turn = true
             end
 
-            @board.add(piece,x,y)
+            loop do 
+                puts "Insert the row: "
+                x = gets.chomp.to_i
+                puts "Insert the column: "
+                y = gets.chomp.to_i
+
+                break if @board.add(piece,x,y)
+                
+            end
+
             @board.display()
 
             
