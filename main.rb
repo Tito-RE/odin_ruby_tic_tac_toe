@@ -3,7 +3,13 @@ module Functions
     def letterToNumber(letter)
         alp = ("a".."z").to_a
         return alp.index(letter)
-    end  
+    end
+
+    # Invert the number given by a valid index from 0 to max
+    def invertNumber(max,number)
+        inverted = (0..max-1).to_a.reverse
+        return inverted[number-1]
+    end
 end 
 
 class Board
@@ -11,12 +17,20 @@ class Board
 
     def initialize(rows, columns)
         @canvas = Array.new(rows) { Array.new(columns) }
+        @columns = generateColumns()
+    end
+    
+    # Generate an array of alphabet of the size of columns
+    def generateColumns()
+        alp = ("a".."z").to_a
+        return alp[0,@canvas.length]
     end
 
+    # Display a friendly reperesenation of the canvas for the user
     def display
         puts "    a   b   c"
         puts "  -------------"
-        i = 1
+        i = @canvas.length 
         @canvas.each do |row|
             print i
             print " | "
@@ -30,24 +44,32 @@ class Board
             end
             puts ""
             puts "  -------------"
-	    i += 1
+	    i -= 1
         end
     end
 
+    # Add a piece to canvas
     def add(object,row,col)
-        col = letterToNumber(col)
+        # Validate coordinates from a user perspective
         if !validCoordinates?(row,col)
            puts "Invalid coordinates!"
            return false
         end
+        
+        # Convert user inputs to valid indexes 
+        row = invertNumber(@canvas.length,row)
+        col = letterToNumber(col)        
+        
         if !emptyCell?(row,col)
            puts "There is a piece here!, try another one"
            return false
         end
+
         @canvas[row][col] = object
         return true
     end
 
+    # Check if the cell of a canvas is empty
     def emptyCell?(row,col)
         return false if @canvas[row][col] != nil
         true    
@@ -55,17 +77,17 @@ class Board
 
     # Check for a valid coordinates
     def validCoordinates?(row,col)
-        return false if row == nil
-        return false if col == nil
-        return false if row >= @canvas.length
-        return false if row <= 0
-        return false if col >= @canvas[0].length
+        return false if row > @canvas.length
+        return false if row < 1
+        return false if !@columns.find_index(col)
         return true
     end
 
     def clean
         @canvas = []
     end
+
+    attr_accessor :columns
 
     private
   
@@ -179,7 +201,6 @@ class TicTaeToeGame
             loop do 
                 puts "Insert the row (number): "
                 x = gets.chomp.to_i
-                x -= 1
                 puts "Insert the column (letter): "
                 y = gets.chomp
 
