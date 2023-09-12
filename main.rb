@@ -188,13 +188,36 @@ class TicTaeToeGame
     def game()
         @board.display()
         turn = true
+        mark = nil
+
+        loop do
+            puts "Player choose your mark: (number)"
+            puts "1. X"
+            puts "2. O"
+            mark = gets.chomp.to_i
+            break if [1,2].include?(mark)
+        end
+
+        if mark == 1
+           p1_name = "X"
+           p1_alias = "X"
+           p2_name = "O"
+           p2_alias = "O"
+        else
+           p1_name = "O"
+           p1_alias = "O"
+           p2_name = "X"
+           p2_alias = "X"
+        end 
+
         while @board.empty_cells? do
-            x,y = nil, nil 
+            x,y = nil, nil
+
             if turn
-                piece = Piece.new("Player1", "X", "X")
+                piece = Piece.new("Player1", p1_name, p1_alias)
                 turn = false
             else
-                piece = Piece.new("Player2", "O", "O")
+                piece = Piece.new("Player2", p2_name, p2_alias)
                 turn = true
             end
 
