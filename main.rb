@@ -189,6 +189,7 @@ class TicTaeToeGame
         @board.display()
         turn = true
         mark = nil
+        winner = false
 
         loop do
             puts "Player choose your mark: (number)"
@@ -236,13 +237,16 @@ class TicTaeToeGame
             
             if @board.checkBoardGame("X")
                 puts "Winner X"
+                winner = true
                 break
             end
             if @board.checkBoardGame("O")
                 puts "Winner O"
+                winner = true
                 break
             end
         end
+        puts "Tie!" if !winner
     end
 
 end
