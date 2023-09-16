@@ -190,6 +190,7 @@ class TicTaeToeGame
         turn = true
         mark = nil
         winner = false
+        msg_player = ""
 
         loop do
             puts "Player choose your mark: (number)"
@@ -216,13 +217,17 @@ class TicTaeToeGame
 
             if turn
                 piece = Piece.new("Player1", p1_name, p1_alias)
+                msg_player = "Player #{p1_name}"
                 turn = false
             else
                 piece = Piece.new("Player2", p2_name, p2_alias)
+                msg_player = "Player #{p2_name}"
                 turn = true
             end
 
-            loop do 
+            loop do
+                puts ""
+                puts msg_player
                 puts "Insert the row (number): "
                 x = gets.chomp.to_i
                 puts "Insert the column (letter): "
