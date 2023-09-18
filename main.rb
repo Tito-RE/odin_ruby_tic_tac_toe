@@ -48,8 +48,10 @@ class Board
         end
     end
 
-    # Add a piece to canvas
+    # Add a piece to canvas #WIP ACCEPT NON CAPITAL
     def add(object,row,col)
+        col = col.downcase()
+
         # Validate coordinates from a user perspective
         if !validCoordinates?(row,col)
            puts "Invalid coordinates!"
