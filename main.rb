@@ -1,3 +1,4 @@
+# General functions to convert or interpret values from user to workable inputs
 module Functions
     # Convert one letter to a number (alphabetically)
     def letterToNumber(letter)
@@ -12,9 +13,11 @@ module Functions
     end
 end 
 
+# General board class
 class Board
     include Functions    
 
+    # Initialize a board gien two integers (size)
     def initialize(rows, columns)
         @canvas = Array.new(rows) { Array.new(columns) }
         @columns = generateColumns()
@@ -48,7 +51,7 @@ class Board
         end
     end
 
-    # Add a piece to canvas #WIP ACCEPT NON CAPITAL
+    # Add a piece to canvas
     def add(object,row,col)
         col = col.downcase()
 
@@ -84,45 +87,55 @@ class Board
         return false if !@columns.find_index(col)
         return true
     end
-
+    
+    # Clean the board
     def clean
         @canvas = []
     end
 
+    # Array of letters for the Y axis
     attr_accessor :columns
 
     private
   
+    # Array of arrays to store the pieces of the games
     attr_accessor :canvas
 end
 
+# General piece class
 class Piece
 
+    # Initialize a piece
     def initialize(player, name, alias_to_display)
         @player = player
         @name = name
         @alias_to_display = alias_to_display
     end
-
-#    protected
     
+    # Value or symbol to display to players
     attr_accessor :alias_to_display
 
     private
 
+    # Owner of player and internal name of piece
     attr_accessor :player, :name
 end 
 
+# Specific class of the board "TicTaeToe" from Board class
 class TicTaeToeBoard < Board
+
+    # Initialize a custom board
     def initialize(rows,columns)
         super
         @name = "TicTaeToe"
     end
 
+    # Check for empty cell in the board
     def empty_cells?
         !@canvas.flatten.all?
     end
 
+    # Check for a winner by given symbol ("O" or "X")
     def checkBoardGame(symbol)
         return true if checkRows(symbol)
         return true if checkColumns(symbol)
@@ -181,19 +194,24 @@ class TicTaeToeBoard < Board
     end
 end
 
+# Game "TicTaeToe" class
 class TicTaeToeGame
+
+    # Initialize game "TicTaeToe"
     def initialize()
         @board = TicTaeToeBoard.new(3,3)
         @name = "TicTaeToe"
     end
     
+    # Principal flow of the game
     def game()
         @board.display()
-        turn = true
-        mark = nil
-        winner = false
+        turn = true # Flag to switch players 
+        mark = nil # Flag to store the "piece" chosen by the user 
+        winner = false 
         msg_player = ""
 
+        # Validate the piece chosen by user
         loop do
             puts "Player choose your mark: (number)"
             puts "1. X"
@@ -202,6 +220,7 @@ class TicTaeToeGame
             break if [1,2].include?(mark)
         end
 
+        # Assign player marks given the fisrt selection
         if mark == 1
            p1_name = "X"
            p1_alias = "X"
@@ -217,6 +236,7 @@ class TicTaeToeGame
         while @board.empty_cells? do
             x,y = nil, nil
 
+            # Switch beetween player
             if turn
                 piece = Piece.new("Player1", p1_name, p1_alias)
                 msg_player = "Player #{p1_name}"
@@ -226,7 +246,8 @@ class TicTaeToeGame
                 msg_player = "Player #{p2_name}"
                 turn = true
             end
-
+            
+            # Get coordinates from players
             loop do
                 puts ""
                 puts msg_player
@@ -241,7 +262,7 @@ class TicTaeToeGame
 
             @board.display()
 
-            
+            # Determinate a winner
             if @board.checkBoardGame("X")
                 puts "Winner X"
                 winner = true
@@ -253,11 +274,11 @@ class TicTaeToeGame
                 break
             end
         end
+        # If there is no winner and no more empty cells
         puts "Tie!" if !winner
     end
-
 end
 
-
+# Main
 game = TicTaeToeGame.new()
 game.game()
