@@ -192,6 +192,14 @@ class TicTaeToeBoard < Board
         end
         return false
     end
+    
+    # Determinate if a player won based on his "symbol"
+    def winner?()
+        return "X" if checkBoardGame("X")
+        return "O" if checkBoardGame("O")
+        return false
+    end
+
 end
 
 # Game "TicTaeToe" class
@@ -263,16 +271,12 @@ class TicTaeToeGame
             @board.display()
 
             # Determinate a winner
-            if @board.checkBoardGame("X")
-                puts "Winner X"
-                winner = true
+            winner = @board.winner?()
+            if winner
+                puts "Winner " + winner
                 break
             end
-            if @board.checkBoardGame("O")
-                puts "Winner O"
-                winner = true
-                break
-            end
+
         end
         # If there is no winner and no more empty cells
         puts "Tie!" if !winner
