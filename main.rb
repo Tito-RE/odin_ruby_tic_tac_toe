@@ -202,6 +202,18 @@ class TicTaeToeBoard < Board
 
 end
 
+# General player class
+class Player
+    
+    attr_accessor :name
+    
+    # Initialize a player
+    def initialize(name)
+        @name = name
+    end
+
+end
+
 # Game "TicTaeToe" class
 class TicTaeToeGame
 
@@ -230,15 +242,11 @@ class TicTaeToeGame
 
         # Assign player marks given the fisrt selection
         if mark == 1
-           p1_name = "X"
-           p1_alias = "X"
-           p2_name = "O"
-           p2_alias = "O"
+           player1 = Player.new("X")
+           player2 = Player.new("O")
         else
-           p1_name = "O"
-           p1_alias = "O"
-           p2_name = "X"
-           p2_alias = "X"
+           player1 = Player.new("O")
+           player2 = Player.new("X")
         end 
 
         while @board.empty_cells? do
@@ -246,19 +254,16 @@ class TicTaeToeGame
 
             # Switch beetween player
             if turn
-                piece = Piece.new("Player1", p1_name, p1_alias)
-                msg_player = "Player #{p1_name}"
+                piece = Piece.new(player1, player1.name, player1.name)
                 turn = false
             else
-                piece = Piece.new("Player2", p2_name, p2_alias)
-                msg_player = "Player #{p2_name}"
+                piece = Piece.new(player2, player2.name, player2.name)
                 turn = true
             end
             
             # Get coordinates from players
             loop do
-                puts ""
-                puts msg_player
+                puts "Player #{piece.alias_to_display}"
                 puts "Insert the row (number): "
                 x = gets.chomp.to_i
                 puts "Insert the column (letter): "
