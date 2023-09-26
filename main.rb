@@ -74,7 +74,7 @@ class Board
         return true
     end
 
-    # Check if the cell of a canvas is empty
+    # Check if the cell of a canvas given a row and col is empty
     def emptyCell?(row,col)
         return false if @canvas[row][col] != nil
         true    
@@ -130,7 +130,7 @@ class TicTaeToeBoard < Board
         @name = "TicTaeToe"
     end
 
-    # Check for empty cell in the board
+    # Check for one or more empty cells in the board
     def empty_cells?
         !@canvas.flatten.all?
     end
