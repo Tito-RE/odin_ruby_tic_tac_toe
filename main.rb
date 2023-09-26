@@ -1,13 +1,13 @@
 # General functions to convert or interpret values from user to workable inputs
 module Functions
     # Convert one letter to a number (alphabetically)
-    def letterToNumber(letter)
+    def letter_to_number(letter)
         alp = ("a".."z").to_a
         return alp.index(letter)
     end
 
     # Invert the number given by a valid index from 0 to max
-    def invertNumber(max,number)
+    def invert_number(max,number)
         inverted = (0..max-1).to_a.reverse
         return inverted[number-1]
     end
@@ -20,11 +20,11 @@ class Board
     # Initialize a board gien two integers (size)
     def initialize(rows, columns)
         @canvas = Array.new(rows) { Array.new(columns) }
-        @columns = generateColumns()
+        @columns = generate_columns()
     end
     
     # Generate an array of alphabet of the size of columns
-    def generateColumns()
+    def generate_columns()
         alp = ("a".."z").to_a
         return alp[0,@canvas.length]
     end
@@ -56,16 +56,16 @@ class Board
         col = col.downcase()
 
         # Validate coordinates from a user perspective
-        if !validCoordinates?(row,col)
+        if !valid_coordinates?(row,col)
            puts "Invalid coordinates!"
            return false
         end
         
         # Convert user inputs to valid indexes 
-        row = invertNumber(@canvas.length,row)
-        col = letterToNumber(col)        
+        row = invert_number(@canvas.length,row)
+        col = letter_to_number(col)        
         
-        if !emptyCell?(row,col)
+        if !empty_cell?(row,col)
            puts "There is a piece here!, try another one"
            return false
         end
@@ -75,13 +75,13 @@ class Board
     end
 
     # Check if the cell of a canvas given a row and col is empty
-    def emptyCell?(row,col)
+    def empty_cell?(row,col)
         return false if @canvas[row][col] != nil
         true    
     end
 
     # Check for a valid coordinates
-    def validCoordinates?(row,col)
+    def valid_coordinates?(row,col)
         return false if row > @canvas.length
         return false if row < 1
         return false if !@columns.find_index(col)
@@ -136,15 +136,15 @@ class TicTaeToeBoard < Board
     end
 
     # Check for a winner by given symbol ("O" or "X")
-    def checkBoardGame(symbol)
-        return true if checkRows(symbol)
-        return true if checkColumns(symbol)
-        return true if checkDiagonals(symbol)
+    def check_board_game(symbol)
+        return true if check_rows(symbol)
+        return true if check_columns(symbol)
+        return true if check_diagonals(symbol)
         return false
     end
 
     # Check for a pieces of the same symbol by rows
-    def checkRows(symbol)
+    def check_rows(symbol)
         counter = 0
         @canvas.each do |row|
             row.each do |p| 
@@ -161,7 +161,7 @@ class TicTaeToeBoard < Board
     end
 
     # Check for a pieces of the same symbol by columns
-    def checkColumns(symbol)
+    def check_columns(symbol)
         counter = 0
         for i in 0..2 do
             for j in 0..2 do
@@ -179,7 +179,7 @@ class TicTaeToeBoard < Board
     end
 
     # Check for a pieces of the same symbol by diagonals
-    def checkDiagonals(symbol)
+    def check_diagonals(symbol)
         if @canvas[0][0] and @canvas[1][1] and @canvas[2][2]
             if @canvas[0][0].alias_to_display == symbol and @canvas[1][1].alias_to_display == symbol and @canvas[2][2].alias_to_display == symbol
                 return true
@@ -195,8 +195,8 @@ class TicTaeToeBoard < Board
     
     # Determinate if a player won based on his "symbol"
     def winner?()
-        return "X" if checkBoardGame("X")
-        return "O" if checkBoardGame("O")
+        return "X" if check_board_game("X")
+        return "O" if check_board_game("O")
         return false
     end
 
