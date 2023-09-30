@@ -82,11 +82,6 @@ class Board
         return false if !@columns.find_index(col)
         return true
     end
-    
-    # Clean the board
-    def clean
-        @canvas = []
-    end
 
     # Array of letters for the Y axis
     attr_accessor :columns
