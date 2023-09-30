@@ -35,15 +35,10 @@ class Board
         puts "  -------------"
         i = @canvas.length 
         @canvas.each do |row|
-            print i
-            print " | "
+            print "#{i} | "
             row.each do |element|
-                if element
-                    print element.alias_to_display
-                else
-                    print " "
-                end
-                print " | "
+                cell = element ? element.alias_to_display : " "
+                print "#{cell} | "
             end
             puts ""
             puts "  -------------"
