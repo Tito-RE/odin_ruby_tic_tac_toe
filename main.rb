@@ -217,13 +217,13 @@ class TicTaeToeGame
     def game()
         @board.display()
         turn = true # Flag to switch players 
-        mark = nil # Flag to store the "piece" chosen by the user 
+        mark = nil # Flag to store the "mark" selected by the first player
         winner = false 
         msg_player = ""
 
-        # Validate the piece chosen by user
+        # Get and validate the "mark" of the first user
         loop do
-            puts "Player choose your mark: (number)"
+            puts "Player select your mark: (number)"
             puts "1. X"
             puts "2. O"
             mark = gets.chomp.to_i
