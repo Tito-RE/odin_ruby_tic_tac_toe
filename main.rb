@@ -37,7 +37,7 @@ class Board
         @canvas.each do |row|
             print "#{i} | "
             row.each do |element|
-                cell = element ? element.alias_to_display : " "
+                cell = element ? element.mark : " "
                 print "#{cell} | "
             end
             puts ""
@@ -96,14 +96,14 @@ end
 class Piece
 
     # Initialize a piece
-    def initialize(player, name, alias_to_display)
+    def initialize(player, name, mark)
         @player = player
         @name = name
-        @alias_to_display = alias_to_display
+        @mark = mark
     end
     
     # Value or symbol to display to players
-    attr_accessor :alias_to_display
+    attr_accessor :mark
 
     private
 
@@ -139,7 +139,7 @@ class TicTaeToeBoard < Board
         @canvas.each do |row|
             row.each do |p| 
                 if p 
-                    if p.alias_to_display == symbol
+                    if p.mark == symbol
                         counter += 1     
                     end
                 end
@@ -157,7 +157,7 @@ class TicTaeToeBoard < Board
             for j in 0..2 do
                 p =  @canvas[j][i]
                 if p
-                    if p.alias_to_display == symbol
+                    if p.mark == symbol
                         counter += 1
                     end
                 end
@@ -171,12 +171,12 @@ class TicTaeToeBoard < Board
     # Check for a pieces of the same symbol by diagonals
     def check_diagonals(symbol)
         if @canvas[0][0] and @canvas[1][1] and @canvas[2][2]
-            if @canvas[0][0].alias_to_display == symbol and @canvas[1][1].alias_to_display == symbol and @canvas[2][2].alias_to_display == symbol
+            if @canvas[0][0].mark == symbol and @canvas[1][1].mark == symbol and @canvas[2][2].mark == symbol
                 return true
             end
         end 
         if @canvas[2][0] and @canvas[1][1] and @canvas[0][2]
-            if @canvas[2][0].alias_to_display == symbol and @canvas[1][1].alias_to_display == symbol and @canvas[0][2].alias_to_display == symbol
+            if @canvas[2][0].mark == symbol and @canvas[1][1].mark == symbol and @canvas[0][2].mark == symbol
                 return true
             end
         end
@@ -253,7 +253,7 @@ class TicTaeToeGame
             
             # Get coordinates from players
             loop do
-                puts "Player #{piece.alias_to_display}"
+                puts "Player #{piece.mark}"
                 puts "Insert the row (number): "
                 x = gets.chomp.to_i
                 puts "Insert the column (letter): "
