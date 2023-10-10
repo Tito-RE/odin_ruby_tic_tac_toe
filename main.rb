@@ -211,12 +211,15 @@ class TicTaeToeGame
     def initialize()
         @board = TicTaeToeBoard.new(3,3)
         @name = "TicTaeToe"
+        @current_player_id = 0
+        @players = [Player.new(""),Player.new("")]
+        @marks = ["X","O"]
     end
     
     # Principal flow of the game
     def game()
         @board.display()
-        turn = true # Flag to switch players 
+        #turn = true # Flag to switch players 
         mark = nil # Flag to store the "mark" selected by the first player
         winner = false 
         msg_player = ""
@@ -231,25 +234,19 @@ class TicTaeToeGame
         end
 
         # Assign player marks given the fisrt selection
-        if mark == 1
-           player1 = Player.new("X")
-           player2 = Player.new("O")
+        if mark == 1  # WIP
+           @players[0].name = @marks[0]
+           @players[1].name = @marks[1]
         else
-           player1 = Player.new("O")
-           player2 = Player.new("X")
+           @players[0].name = @marks[1]
+           @players[1].name = @marks[0]
         end 
 
         while @board.empty_cells? do
             x,y = nil, nil
 
-            # Switch beetween player
-            if turn
-                piece = Piece.new(player1, player1.name, player1.name)
-                turn = false
-            else
-                piece = Piece.new(player2, player2.name, player2.name)
-                turn = true
-            end
+            # Create piece based on player info
+            piece = Piece.new(@players[@current_player_id], @players[@current_player_id].name, @players[@current_player_id].name)
             
             # Get coordinates from players
             loop do
@@ -271,6 +268,9 @@ class TicTaeToeGame
                 puts "Winner " + winner
                 break
             end
+            
+            # Switch players
+            @current_player_id = 1 - @current_player_id
 
         end
         # If there is no winner and no more empty cells
@@ -281,3 +281,4 @@ end
 # Main
 game = TicTaeToeGame.new()
 game.game()
+ 
