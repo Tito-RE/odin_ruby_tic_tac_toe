@@ -219,7 +219,6 @@ class TicTaeToeGame
     # Principal flow of the game
     def game()
         @board.display()
-        #turn = true # Flag to switch players 
         mark = nil # Flag to store the "mark" selected by the first player
         winner = false 
         msg_player = ""
@@ -233,24 +232,22 @@ class TicTaeToeGame
             break if [1,2].include?(mark)
         end
 
-        # Assign player marks given the fisrt selection
-        if mark == 1  # WIP
-           @players[0].name = @marks[0]
-           @players[1].name = @marks[1]
-        else
-           @players[0].name = @marks[1]
-           @players[1].name = @marks[0]
-        end 
+        # Assign players based on the first player mark
+        mark = mark - 1
+        @players[0].name = @marks[mark]
+        @players[1].name = @marks[1 - mark]
 
         while @board.empty_cells? do
             x,y = nil, nil
-
+            
             # Create piece based on player info
-            piece = Piece.new(@players[@current_player_id], @players[@current_player_id].name, @players[@current_player_id].name)
+            piece = Piece.new(@players[@current_player_id], 
+                              @players[@current_player_id].name, 
+                              @players[@current_player_id].name)
             
             # Get coordinates from players
             loop do
-                puts "Player #{piece.mark}"
+                puts "Player #{@players[@current_player_id].name}"
                 puts "Insert the row (number): "
                 x = gets.chomp.to_i
                 puts "Insert the column (letter): "
