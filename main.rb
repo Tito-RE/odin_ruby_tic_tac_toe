@@ -23,6 +23,11 @@ class Board
         @columns = generate_columns()
     end
     
+    # Gen the length of the canvas from board object
+    def length
+       return @canvas.length
+    end
+    
     # Generate an array of alphabet of the size of columns
     def generate_columns()
         alp = ("a".."z").to_a
@@ -48,23 +53,6 @@ class Board
 
     # Add a piece to canvas
     def add(object,row,col)
-        col = col.downcase()
-
-        # Validate coordinates from a user perspective
-        if !valid_coordinates?(row,col)
-           puts "Invalid coordinates!"
-           return false
-        end
-        
-        # Convert user inputs to valid indexes 
-        row = invert_number(@canvas.length,row)
-        col = letter_to_number(col)        
-        
-        if !empty_cell?(row,col)
-           puts "There is a piece here!, try another one"
-           return false
-        end
-
         @canvas[row][col] = object
         return true
     end
@@ -75,8 +63,11 @@ class Board
         true    
     end
 
-    # Check for a valid coordinates
+    # Check for a valid general coordinates
     def valid_coordinates?(row,col)
+        # Convert the col value to downcase
+        col = col.downcase()
+
         return false if row > @canvas.length
         return false if row < 1
         return false if !@columns.find_index(col)
@@ -198,8 +189,28 @@ class Player
     attr_accessor :name
     
     # Initialize a player
-    def initialize(name)
+    def initialize(game,name)
+        @game = game
         @name = name
+    end
+
+    # Ask for a valid coordinates from a the board
+    def select_position(piece)
+        coordinates = nil
+        
+        # Get coordinates from players
+        loop do
+            puts "Player #{@name}"
+            puts "Insert the row (number): "
+            x = gets.chomp.to_i
+            puts "Insert the column (letter): "
+            y = gets.chomp
+	
+            coordinates = @game.convert_position(piece,x,y)
+            
+            break if !coordinates.nil?
+        end
+        return coordinates
     end
 
 end
@@ -212,16 +223,39 @@ class TicTaeToeGame
         @board = TicTaeToeBoard.new(3,3)
         @name = "TicTaeToe"
         @current_player_id = 0
-        @players = [Player.new(""),Player.new("")]
+        @players = [Player.new(self,""),Player.new(self,"")]
         @marks = ["X","O"]
+    end
+    
+    # Convert positions to a valid positions
+    def convert_position(piece,row,col)
+
+        # Validate coordinates from a user perspective
+        if !@board.valid_coordinates?(row,col)
+           puts "Invalid coordinates!"
+           return nil
+        end
+
+        # Convert user inputs to valid indexes 
+        row = @board.invert_number(@board.length,row)
+        col = @board.letter_to_number(col)
+     
+        # Specific validate to the TicTaeToeGame
+        if !@board.empty_cell?(row,col)
+           puts "There is a piece here!, try another one"
+           return nil
+        end
+	
+        return row,col
     end
     
     # Principal flow of the game
     def game()
-        @board.display()
         mark = nil # Flag to store the "mark" selected by the first player
         winner = false 
-        msg_player = ""
+
+	# Display the board at the beginning of the game
+	@board.display()
 
         # Get and validate the "mark" of the first user
         loop do
@@ -238,25 +272,15 @@ class TicTaeToeGame
         @players[1].name = @marks[1 - mark]
 
         while @board.empty_cells? do
-            x,y = nil, nil
             
             # Create piece based on player info
             piece = Piece.new(@players[@current_player_id], 
                               @players[@current_player_id].name, 
                               @players[@current_player_id].name)
             
-            # Get coordinates from players
-            loop do
-                puts "Player #{@players[@current_player_id].name}"
-                puts "Insert the row (number): "
-                x = gets.chomp.to_i
-                puts "Insert the column (letter): "
-                y = gets.chomp
-
-                break if @board.add(piece,x,y)
-                
-            end
-
+            place_player_marker(@players[@current_player_id], piece)
+	    
+	    # Display the board
             @board.display()
 
             # Determinate a winner
@@ -272,6 +296,12 @@ class TicTaeToeGame
         end
         # If there is no winner and no more empty cells
         puts "Tie!" if !winner
+    end
+
+    # Place a piece from the player in the board
+    def place_player_marker(player,piece)
+        coordinates = player.select_position(piece)
+        @board.add(piece,coordinates[0],coordinates[1])
     end
 end
 
