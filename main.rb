@@ -274,11 +274,11 @@ class TicTaeToeGame
         while @board.empty_cells? do
             
             # Create piece based on player info
-            piece = Piece.new(@players[@current_player_id], 
-                              @players[@current_player_id].name, 
-                              @players[@current_player_id].name)
+            player_name = current_player().name
+            piece = Piece.new(current_player(),player_name,player_name)
             
-            place_player_marker(@players[@current_player_id], piece)
+            # Place the piece (mark)
+            place_player_marker(current_player(), piece)
 	    
 	    # Display the board
             @board.display()
@@ -291,7 +291,7 @@ class TicTaeToeGame
             end
             
             # Switch players
-            @current_player_id = 1 - @current_player_id
+            switch_players!
 
         end
         # If there is no winner and no more empty cells
@@ -303,6 +303,17 @@ class TicTaeToeGame
         coordinates = player.select_position(piece)
         @board.add(piece,coordinates[0],coordinates[1])
     end
+    
+    # Return the current player
+    def current_player()
+        return @players[@current_player_id]
+    end
+    
+    # Switch current player id (index)
+    def switch_players!
+        @current_player_id = 1 - @current_player_id
+    end
+    
 end
 
 # Main
