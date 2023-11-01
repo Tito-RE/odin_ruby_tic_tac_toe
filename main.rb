@@ -175,9 +175,8 @@ class TicTaeToeBoard < Board
     end
     
     # Determinate if a player won based on his "symbol"
-    def winner?()
-        return "X" if check_board_game("X")
-        return "O" if check_board_game("O")
+    def winner?(player)
+        return true if check_board_game(player.name)
         return false
     end
 
@@ -252,7 +251,6 @@ class TicTaeToeGame
     # Principal flow of the game
     def game()
         mark = nil # Flag to store the "mark" selected by the first player
-        winner = false 
 
 	# Display the board at the beginning of the game
 	@board.display()
@@ -271,8 +269,7 @@ class TicTaeToeGame
         @players[0].name = @marks[mark]
         @players[1].name = @marks[1 - mark]
 
-        while @board.empty_cells? do
-            
+        loop do           
             # Create piece based on player info
             player_name = current_player().name
             piece = Piece.new(current_player(),player_name,player_name)
@@ -284,18 +281,18 @@ class TicTaeToeGame
             @board.display()
 
             # Determinate a winner
-            winner = @board.winner?()
-            if winner
-                puts "Winner " + winner
-                break
+            if @board.winner?(current_player())
+                puts "Winner " + current_player().name
+                return
+            # If there is no more empty cells
+            elsif !@board.empty_cells?
+                puts "Tie!"
+                return 
             end
             
             # Switch players
             switch_players!
-
         end
-        # If there is no winner and no more empty cells
-        puts "Tie!" if !winner
     end
 
     # Place a piece from the player in the board
