@@ -75,12 +75,9 @@ class Board
     end
 
     # Array of letters for the Y axis
-    attr_accessor :columns
-
-    private
-  
     # Array of arrays to store the pieces of the games
-    attr_accessor :canvas
+    attr_accessor :columns, :canvas
+  
 end
 
 # General piece class
@@ -101,86 +98,6 @@ class Piece
     # Owner of player and internal name of piece
     attr_accessor :player, :name
 end 
-
-# Specific class of the board "TicTaeToe" from Board class
-class TicTaeToeBoard < Board
-
-    # Initialize a custom board
-    def initialize(rows,columns)
-        super
-        @name = "TicTaeToe"
-    end
-
-    # Check for one or more empty cells in the board
-    def empty_cells?
-        !@canvas.flatten.all?
-    end
-
-    # Check for a winner by given symbol ("O" or "X")
-    def check_board_game(symbol)
-        return true if check_rows(symbol)
-        return true if check_columns(symbol)
-        return true if check_diagonals(symbol)
-        return false
-    end
-
-    # Check for a pieces of the same symbol by rows
-    def check_rows(symbol)
-        counter = 0
-        @canvas.each do |row|
-            row.each do |p| 
-                if p 
-                    if p.mark == symbol
-                        counter += 1     
-                    end
-                end
-            end
-            return true if counter == 3
-            counter = 0 
-        end
-        return false
-    end
-
-    # Check for a pieces of the same symbol by columns
-    def check_columns(symbol)
-        counter = 0
-        for i in 0..2 do
-            for j in 0..2 do
-                p =  @canvas[j][i]
-                if p
-                    if p.mark == symbol
-                        counter += 1
-                    end
-                end
-            end
-            return true if counter == 3
-            counter = 0
-        end
-        return false
-    end
-
-    # Check for a pieces of the same symbol by diagonals
-    def check_diagonals(symbol)
-        if @canvas[0][0] and @canvas[1][1] and @canvas[2][2]
-            if @canvas[0][0].mark == symbol and @canvas[1][1].mark == symbol and @canvas[2][2].mark == symbol
-                return true
-            end
-        end 
-        if @canvas[2][0] and @canvas[1][1] and @canvas[0][2]
-            if @canvas[2][0].mark == symbol and @canvas[1][1].mark == symbol and @canvas[0][2].mark == symbol
-                return true
-            end
-        end
-        return false
-    end
-    
-    # Determinate if a player won based on his "symbol"
-    def winner?(player)
-        return true if check_board_game(player.name)
-        return false
-    end
-
-end
 
 # General player class
 class Player
@@ -219,11 +136,80 @@ class TicTaeToeGame
 
     # Initialize game "TicTaeToe"
     def initialize()
-        @board = TicTaeToeBoard.new(3,3)
+        @board = Board.new(3,3)
         @name = "TicTaeToe"
         @current_player_id = 0
         @players = [Player.new(self,""),Player.new(self,"")]
         @marks = ["X","O"]
+    end
+    
+    # Check for one or more empty cells in the board
+    def empty_cells?
+        @board.canvas.flatten.all?
+    end
+
+    # Check for a winner by given symbol ("O" or "X")
+    def check_board_game(symbol)
+        return true if check_rows(symbol)
+        return true if check_columns(symbol)
+        return true if check_diagonals(symbol)
+        return false
+    end
+
+    # Check for a pieces of the same symbol by rows
+    def check_rows(symbol)
+        counter = 0
+        @board.canvas.each do |row|
+            row.each do |p| 
+                if p 
+                    if p.mark == symbol
+                        counter += 1     
+                    end
+                end
+            end
+            return true if counter == 3
+            counter = 0 
+        end
+        return false
+    end
+
+    # Check for a pieces of the same symbol by columns
+    def check_columns(symbol)
+        counter = 0
+        for i in 0..2 do
+            for j in 0..2 do
+                p =  @board.canvas[j][i]
+                if p
+                    if p.mark == symbol
+                        counter += 1
+                    end
+                end
+            end
+            return true if counter == 3
+            counter = 0
+        end
+        return false
+    end
+
+    # Check for a pieces of the same symbol by diagonals
+    def check_diagonals(symbol)
+        if @board.canvas[0][0] and @board.canvas[1][1] and @board.canvas[2][2]
+            if @board.canvas[0][0].mark == symbol and @board.canvas[1][1].mark == symbol and @board.canvas[2][2].mark == symbol
+                return true
+            end
+        end 
+        if @board.canvas[2][0] and @board.canvas[1][1] and @board.canvas[0][2]
+            if @board.canvas[2][0].mark == symbol and @board.canvas[1][1].mark == symbol and @board.canvas[0][2].mark == symbol
+                return true
+            end
+        end
+        return false
+    end
+    
+    # Determinate if a player won based on his "symbol"
+    def winner?(player)
+        return true if check_board_game(player.name)
+        return false
     end
     
     # Convert positions to a valid positions
@@ -281,11 +267,11 @@ class TicTaeToeGame
             @board.display()
 
             # Determinate a winner
-            if @board.winner?(current_player())
+            if winner?(current_player())
                 puts "Winner " + current_player().name
                 return
             # If there is no more empty cells
-            elsif !@board.empty_cells?
+            elsif empty_cells?
                 puts "Tie!"
                 return 
             end
