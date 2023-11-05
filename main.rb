@@ -15,7 +15,11 @@ end
 
 # General board class
 class Board
-    include Functions    
+    include Functions
+    
+    # Array of letters for the Y axis
+    # Array of arrays to store the pieces of the games
+    attr_reader :columns, :canvas    
 
     # Initialize a board gien two integers (size)
     def initialize(rows, columns)
@@ -73,10 +77,6 @@ class Board
         return false if !@columns.find_index(col)
         return true
     end
-
-    # Array of letters for the Y axis
-    # Array of arrays to store the pieces of the games
-    attr_accessor :columns, :canvas
   
 end
 
