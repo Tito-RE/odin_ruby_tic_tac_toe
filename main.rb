@@ -234,13 +234,10 @@ class TicTaeToeGame
         return row,col
     end
     
-    # Principal flow of the game
-    def game()
+    # Ask for the mark of the first player
+    def ask_player_marks()
         mark = nil # Flag to store the "mark" selected by the first player
-
-	# Display the board at the beginning of the game
-	@board.display()
-
+        
         # Get and validate the "mark" of the first user
         loop do
             puts "Player select your mark: (number)"
@@ -248,12 +245,25 @@ class TicTaeToeGame
             puts "2. O"
             mark = gets.chomp.to_i
             break if [1,2].include?(mark)
+            puts "Invalid option.."
         end
-
+        
         # Assign players based on the first player mark
         mark = mark - 1
         @players[0].name = @marks[mark]
         @players[1].name = @marks[1 - mark]
+    end
+    
+    
+    # Principal flow of the game
+    def game()
+        
+	# Display the board at the beginning of the game
+	@board.display()
+
+        # Ask for the mark of the first player
+        ask_player_marks()
+        
 
         loop do           
             # Create piece based on player info
