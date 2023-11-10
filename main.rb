@@ -139,8 +139,7 @@ class TicTaeToeGame
         @board = Board.new(3,3)
         @name = "TicTaeToe"
         @current_player_id = 0
-        @players = [Player.new(self,""),Player.new(self,"")]
-        @marks = ["X","O"]
+        @players = [Player.new(self,"X"),Player.new(self,"O")]
     end
     
     # Check for one or more empty cells in the board
@@ -236,22 +235,20 @@ class TicTaeToeGame
     
     # Ask for the mark of the first player
     def ask_player_marks()
-        mark = nil # Flag to store the "mark" selected by the first player
+        option = nil # Flag to store the "mark" selected by the first player
         
         # Get and validate the "mark" of the first user
         loop do
             puts "Player select your mark: (number)"
             puts "1. X"
             puts "2. O"
-            mark = gets.chomp.to_i
-            break if [1,2].include?(mark)
+            option = gets.chomp.to_i
+            break if [1,2].include?(option)
             puts "Invalid option.."
         end
         
         # Assign players based on the first player mark
-        mark = mark - 1
-        @players[0].name = @marks[mark]
-        @players[1].name = @marks[1 - mark]
+        @current_player_id = option - 1
     end
     
     
@@ -263,7 +260,6 @@ class TicTaeToeGame
 
         # Ask for the mark of the first player
         ask_player_marks()
-        
 
         loop do           
             # Create piece based on player info
