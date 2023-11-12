@@ -38,8 +38,8 @@ class Board
         return alp[0,@canvas.length]
     end
 
-    # Display a friendly reperesenation of the canvas for the user
-    def display
+    # Print a friendly reperesenation of the canvas for the user
+    def show
         puts "    a   b   c"
         puts "  -------------"
         i = @canvas.length 
@@ -90,7 +90,7 @@ class Piece
         @mark = mark
     end
     
-    # Value or symbol to display to players
+    # Value or symbol to show to players
     attr_accessor :mark
 
     private
@@ -255,8 +255,8 @@ class TicTaeToeGame
     # Principal flow of the game
     def game()
         
-	# Display the board at the beginning of the game
-	@board.display()
+	# Print the board at the beginning of the game
+	@board.show()
 
         # Ask for the mark of the first player
         ask_player_marks()
@@ -269,8 +269,8 @@ class TicTaeToeGame
             # Place the piece (mark)
             place_player_marker(current_player(), piece)
 	    
-	    # Display the board
-            @board.display()
+	    # Print the board
+            @board.show()
 
             # Determinate a winner
             if winner?(current_player())
