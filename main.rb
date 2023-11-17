@@ -17,9 +17,8 @@ end
 class Board
     include Functions
     
-    # Array of letters for the Y axis
     # Array of arrays to store the pieces of the games
-    attr_reader :columns, :canvas    
+    attr_reader :canvas    
 
     # Initialize a board gien two integers (size)
     def initialize(rows, columns)
@@ -27,17 +26,6 @@ class Board
         @columns = generate_columns()
     end
     
-    # Gen the length of the canvas from board object
-    def length
-       return @canvas.length
-    end
-    
-    # Generate an array of alphabet of the size of columns
-    def generate_columns()
-        alp = ("a".."z").to_a
-        return alp[0,@canvas.length]
-    end
-
     # Print a friendly reperesenation of the canvas for the user
     def show
         puts "    a   b   c"
@@ -54,19 +42,7 @@ class Board
 	    i -= 1
         end
     end
-
-    # Add a piece to canvas
-    def add(object,row,col)
-        @canvas[row][col] = object
-        return true
-    end
-
-    # Check if the cell of a canvas given a row and col is empty
-    def empty_cell?(row,col)
-        return false if @canvas[row][col] != nil
-        true    
-    end
-
+    
     # Check for a valid general coordinates
     def valid_coordinates?(row,col)
         # Convert the col value to downcase
@@ -77,7 +53,35 @@ class Board
         return false if !@columns.find_index(col)
         return true
     end
-  
+    
+    # Gen the length of the canvas from board object
+    def length
+       return @canvas.length
+    end
+    
+    # Check if the cell of a canvas given a row and col is empty
+    def empty_cell?(row,col)
+        return false if @canvas[row][col] != nil
+        true    
+    end
+    
+    # Add a piece to canvas
+    def add(object,row,col)
+        @canvas[row][col] = object
+        return true
+    end
+    
+    private
+    
+    # Array of letters for the Y axis
+    attr_reader :columns
+    
+    # Generate an array of alphabet of the size of columns
+    def generate_columns()
+        alp = ("a".."z").to_a
+        return alp[0,@canvas.length]
+    end
+   
 end
 
 # General piece class
