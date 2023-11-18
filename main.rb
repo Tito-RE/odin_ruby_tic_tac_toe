@@ -95,12 +95,7 @@ class Piece
     end
     
     # Value or symbol to show to players
-    attr_accessor :mark
-
-    private
-
-    # Owner of player and internal name of piece
-    attr_accessor :player, :name
+    attr_reader :mark
 end 
 
 # General player class
