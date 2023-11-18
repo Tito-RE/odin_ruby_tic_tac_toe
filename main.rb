@@ -100,8 +100,8 @@ end
 
 # General player class
 class Player
-    
-    attr_accessor :name
+    # Name of the player
+    attr_reader :name
     
     # Initialize a player
     def initialize(game,name)
