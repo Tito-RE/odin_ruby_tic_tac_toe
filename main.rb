@@ -141,6 +141,8 @@ class TicTaeToeGame
         @players = [Player.new(self,"X"),Player.new(self,"O")]
     end
     
+    private
+    
     # Check for one or more empty cells in the board
     def empty_cells?
         @board.canvas.flatten.all?
@@ -210,6 +212,42 @@ class TicTaeToeGame
         return false
     end
     
+    # Ask for the mark of the first player
+    def ask_player_marks()
+        option = nil # Flag to store the "mark" selected by the first player
+        
+        # Get and validate the "mark" of the first user
+        loop do
+            puts "Player select your mark: (number)"
+            puts "1. X"
+            puts "2. O"
+            option = gets.chomp.to_i
+            break if [1,2].include?(option)
+            puts "Invalid option.."
+        end
+        
+        # Assign players based on the first player mark
+        @current_player_id = option - 1
+    end
+
+    # Place a piece from the player in the board
+    def place_player_marker(player,piece)
+        coordinates = player.select_position(piece)
+        @board.add(piece,coordinates[0],coordinates[1])
+    end
+    
+    # Return the current player
+    def current_player()
+        return @players[@current_player_id]
+    end
+    
+    # Switch current player id (index)
+    def switch_players!
+        @current_player_id = 1 - @current_player_id
+    end
+    
+    public 
+    
     # Convert positions to a valid positions
     def convert_position(piece,row,col)
 
@@ -231,25 +269,6 @@ class TicTaeToeGame
 	
         return row,col
     end
-    
-    # Ask for the mark of the first player
-    def ask_player_marks()
-        option = nil # Flag to store the "mark" selected by the first player
-        
-        # Get and validate the "mark" of the first user
-        loop do
-            puts "Player select your mark: (number)"
-            puts "1. X"
-            puts "2. O"
-            option = gets.chomp.to_i
-            break if [1,2].include?(option)
-            puts "Invalid option.."
-        end
-        
-        # Assign players based on the first player mark
-        @current_player_id = option - 1
-    end
-    
     
     # Principal flow of the game
     def game()
@@ -284,22 +303,6 @@ class TicTaeToeGame
             # Switch players
             switch_players!
         end
-    end
-
-    # Place a piece from the player in the board
-    def place_player_marker(player,piece)
-        coordinates = player.select_position(piece)
-        @board.add(piece,coordinates[0],coordinates[1])
-    end
-    
-    # Return the current player
-    def current_player()
-        return @players[@current_player_id]
-    end
-    
-    # Switch current player id (index)
-    def switch_players!
-        @current_player_id = 1 - @current_player_id
     end
     
 end
