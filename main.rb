@@ -28,8 +28,15 @@ class Board
     
     # Print a friendly reperesenation of the canvas for the user
     def show
-        puts "    a   b   c"
-        puts "  -------------"
+        # Print the header section
+        print "    "
+        @columns.each { |c| print "#{c}   " }
+        puts ""
+        print "  "
+        @columns.each { print "----" }
+        print "-\n"
+        
+        # Print the body section
         i = @canvas.length 
         @canvas.each do |row|
             print "#{i} | "
@@ -37,8 +44,9 @@ class Board
                 cell = element ? element.mark : " "
                 print "#{cell} | "
             end
-            puts ""
-            puts "  -------------"
+            print "\n  "
+            @columns.each { print "----" }
+            print "-\n"
 	    i -= 1
         end
     end
@@ -79,7 +87,7 @@ class Board
     # Generate an array of alphabet of the size of columns
     def generate_columns()
         alp = ("a".."z").to_a
-        return alp[0,@canvas.length]
+        return alp[0,@canvas[0].length]
     end
    
 end
